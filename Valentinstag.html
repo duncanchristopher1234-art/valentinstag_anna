@@ -27,6 +27,7 @@
       backdrop-filter: blur(15px);
       box-shadow: 0 10px 40px rgba(0,0,0,0.3);
       max-width: 420px;
+      z-index: 1; /* Damit Herzen im Hintergrund fliegen */
     }
 
     img {
@@ -83,7 +84,8 @@
       height: 20px;
       background: red;
       transform: rotate(45deg);
-      animation: floatUp 4s linear infinite;
+      animation: floatUp 6s linear infinite;
+      z-index: 0;
     }
 
     .heart::before,
@@ -112,7 +114,7 @@
         opacity: 1;
       }
       100% {
-        transform: translateY(-300px) rotate(45deg);
+        transform: translateY(-600px) rotate(45deg);
         opacity: 0;
       }
     }
@@ -140,29 +142,33 @@
       yesSize += 0.25;
       document.getElementById("yes").style.transform =
         `scale(${yesSize})`;
-      createHeart();
+      createHearts(3); // mehrere Herzen gleichzeitig
     }
 
     function yesClicked() {
       document.querySelector(".buttons").style.display = "none";
       document.getElementById("message").innerText =
         "Yaaay 😍 Ich freu mich riesig auf unser Date 💕";
-      createHeart(true);
+      createHearts(10); // große Herz-Explosion beim Ja
     }
 
-    // Herz erstellen
-    function createHeart(always=false) {
-      const heart = document.createElement('div');
-      heart.classList.add('heart');
-      heart.style.left = Math.random() * window.innerWidth + 'px';
-      heart.style.bottom = always ? '0px' : '20px';
-      heart.style.width = heart.style.height = (10 + Math.random()*20) + 'px';
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 4000);
+    // Funktion, um Herzen zu erzeugen
+    function createHearts(number = 1) {
+      for(let i=0; i<number; i++){
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.style.left = Math.random() * window.innerWidth + 'px';
+        heart.style.bottom = '0px';
+        const size = 10 + Math.random() * 25;
+        heart.style.width = heart.style.height = size + 'px';
+        heart.style.animationDuration = (4 + Math.random()*2) + 's';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+      }
     }
 
-    // zufällige Herzen im Hintergrund
-    setInterval(() => createHeart(true), 800);
+    // Hintergrund-Herzen kontinuierlich erzeugen
+    setInterval(() => createHearts(Math.floor(Math.random()*2 + 1)), 400);
   </script>
 
 </body>
