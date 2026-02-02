@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>Für Anna ❤️</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
     body {
       margin: 0;
       height: 100vh;
@@ -11,29 +13,34 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
       color: white;
       text-align: center;
+      overflow: hidden;
     }
 
     .card {
+      position: relative;
       background: rgba(255, 255, 255, 0.15);
       padding: 40px;
-      border-radius: 20px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      border-radius: 25px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
       max-width: 420px;
     }
 
     img {
       width: 100%;
-      border-radius: 15px;
-      margin-bottom: 20px;
+      border-radius: 20px;
+      margin-bottom: 25px;
+      display: block;
     }
 
     h1 {
+      font-family: 'Pacifico', cursive;
       font-size: 2em;
       margin-bottom: 25px;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
     }
 
     .buttons {
@@ -48,29 +55,72 @@
       border: none;
       border-radius: 30px;
       cursor: pointer;
-      transition: transform 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-weight: bold;
     }
 
     #yes {
       background: #ff4d6d;
       color: white;
+      box-shadow: 0 5px 15px rgba(255,77,109,0.5);
     }
 
     #no {
       background: white;
       color: #ff4d6d;
+      box-shadow: 0 5px 15px rgba(255,77,109,0.3);
     }
 
     #message {
       margin-top: 25px;
       font-size: 1.4em;
     }
+
+    /* Herz-Animation */
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      transform: rotate(45deg);
+      animation: floatUp 4s linear infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: 10px;
+      top: 0;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(45deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-300px) rotate(45deg);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
 
   <div class="card">
-    <!-- HIER DAS BILD -->
     <img src="anna.jpeg" alt="Wir ❤️">
 
     <h1>Willst du mein Valentinstags-Date sein, Anna? ❤️</h1>
@@ -90,13 +140,29 @@
       yesSize += 0.25;
       document.getElementById("yes").style.transform =
         `scale(${yesSize})`;
+      createHeart();
     }
 
     function yesClicked() {
       document.querySelector(".buttons").style.display = "none";
       document.getElementById("message").innerText =
         "Yaaay 😍 Ich freu mich riesig auf unser Date 💕";
+      createHeart(true);
     }
+
+    // Herz erstellen
+    function createHeart(always=false) {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      heart.style.bottom = always ? '0px' : '20px';
+      heart.style.width = heart.style.height = (10 + Math.random()*20) + 'px';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 4000);
+    }
+
+    // zufällige Herzen im Hintergrund
+    setInterval(() => createHeart(true), 800);
   </script>
 
 </body>
