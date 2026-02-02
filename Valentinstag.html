@@ -17,6 +17,7 @@
       color: white;
       text-align: center;
       overflow: hidden;
+      position: relative;
     }
 
     .card {
@@ -79,66 +80,20 @@
       font-size: 1.4em;
     }
 
-    /* Herz-Animation */
-    .heart {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background: red;
-      transform: rotate(45deg);
-      animation: floatUp 8s linear infinite;
-      z-index: 0;
-    }
-
-    .heart::before,
-    .heart::after {
-      content: "";
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background: red;
-      border-radius: 50%;
-    }
-
-    .heart::before {
-      top: -10px;
-      left: 0;
-    }
-
-    .heart::after {
-      left: 10px;
+    canvas {
+      position: fixed;
       top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 2;
     }
 
-    @keyframes floatUp {
-      0% {
-        transform: translateY(0) rotate(45deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-900px) rotate(45deg);
-        opacity: 0;
-      }
-    }
-
-    /* ===== RESPONSIVE FÜR HANDYS ===== */
     @media (max-width: 600px) {
-      h1 {
-        font-size: 2.5em;
-      }
-      button {
-        padding: 20px 35px;
-        font-size: 1.5em;
-      }
-      #message {
-        font-size: 1.8em;
-      }
-      .card {
-        padding: 30px 20px;
-      }
-      img {
-        margin-bottom: 30px;
-      }
+      h1 { font-size: 2.5em; }
+      button { padding: 20px 35px; font-size: 1.5em; }
+      #message { font-size: 1.8em; }
+      .card { padding: 30px 20px; }
+      img { margin-bottom: 30px; }
     }
   </style>
 </head>
@@ -157,39 +112,74 @@
     <div id="message"></div>
   </div>
 
-  <script>
-    let yesSize = 1;
+  <canvas id="fireworkCanvas"></canvas>
 
-    function noClicked() {
-      yesSize += 0.25;
-      document.getElementById("yes").style.transform =
-        `scale(${yesSize})`;
-      createHearts(2); // weniger Herzen
-    }
+  <script>
+    const canvas = document.getElementById('fireworkCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    let particles = [];
 
     function yesClicked() {
       document.querySelector(".buttons").style.display = "none";
       document.getElementById("message").innerText =
-        "Yaaay 😍 Ich freu mich riesig auf unser Date 💕";
-      createHearts(5); // kleine Herz-Explosion beim Ja
+        "Yaaay 😍 Ich liebe dich mein Schatziiiiiiii 💕";
+
+      // Feuerwerk starten
+      for(let i=0; i<5; i++){
+        createFirework(Math.random() * canvas.width, Math.random() * canvas.height/2 + canvas.height/4);
+      }
+      animateFireworks();
     }
 
-    function createHearts(number = 1) {
-      for(let i=0; i<number; i++){
-        const heart = document.createElement('div');
-        heart.classList.add('heart');
-        heart.style.left = Math.random() * window.innerWidth + 'px';
-        heart.style.bottom = '0px';
-        const size = 15 + Math.random() * 35; // Herzgröße
-        heart.style.width = heart.style.height = size + 'px';
-        heart.style.animationDuration = (6 + Math.random()*3) + 's'; // schneller/variabel
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 9000); // entfernen nach Ende
+    function noClicked() {
+      alert("ERROR sie haben den falschen Knopf gedrückt probieren sie es nocheinmal!!!");
+    }
+
+    function createFirework(x, y) {
+      const count = 100;
+      for(let i=0; i<count; i++){
+        particles.push({
+          x: x,
+          y: y,
+          vx: (Math.random() - 0.5) * 6,
+          vy: (Math.random() - 0.5) * 6,
+          alpha: 1,
+          color: `hsl(${Math.random()*360}, 100%, 60%)`,
+          size: Math.random()*3 + 1
+        });
       }
     }
 
-    // Hintergrund-Herzen kontinuierlich erzeugen (weniger)
-    setInterval(() => createHearts(Math.floor(Math.random()*1 + 1)), 700);
+    function animateFireworks() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for(let i=particles.length-1; i>=0; i--){
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.05; // leichte Schwerkraft
+        p.alpha -= 0.01;
+        if(p.alpha <= 0){
+          particles.splice(i,1);
+          continue;
+        }
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+        ctx.fill();
+      }
+      if(particles.length > 0){
+        requestAnimationFrame(animateFireworks);
+      }
+    }
   </script>
 
 </body>
