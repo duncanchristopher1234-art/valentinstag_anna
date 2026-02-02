@@ -27,7 +27,8 @@
       backdrop-filter: blur(15px);
       box-shadow: 0 10px 40px rgba(0,0,0,0.3);
       max-width: 420px;
-      z-index: 1; /* Damit Herzen im Hintergrund fliegen */
+      width: 90%;
+      z-index: 1;
     }
 
     img {
@@ -48,6 +49,7 @@
       display: flex;
       justify-content: center;
       gap: 20px;
+      flex-wrap: wrap;
     }
 
     button {
@@ -118,6 +120,26 @@
         opacity: 0;
       }
     }
+
+    /* ===== RESPONSIVE FÜR HANDYS ===== */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2.5em;
+      }
+      button {
+        padding: 20px 35px;
+        font-size: 1.5em;
+      }
+      #message {
+        font-size: 1.8em;
+      }
+      .card {
+        padding: 30px 20px;
+      }
+      img {
+        margin-bottom: 30px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -148,28 +170,28 @@
     function yesClicked() {
       document.querySelector(".buttons").style.display = "none";
       document.getElementById("message").innerText =
-        "Yaaay 😍 Ich liebe dich mein Schatziiiiiiiii 💕";
+        "Yaaay 😍 Ich liebe dich mein Schatziiii 💕";
       createHearts(10); // große Herz-Explosion beim Ja
     }
 
-    // Funktion, um Herzen zu erzeugen
     function createHearts(number = 1) {
       for(let i=0; i<number; i++){
         const heart = document.createElement('div');
         heart.classList.add('heart');
         heart.style.left = Math.random() * window.innerWidth + 'px';
         heart.style.bottom = '0px';
-        const size = 10 + Math.random() * 25;
+        const size = 15 + Math.random() * 35; // größere Herzen für Handys
         heart.style.width = heart.style.height = size + 'px';
-        heart.style.animationDuration = (4 + Math.random()*2) + 's';
+        heart.style.animationDuration = (4 + Math.random()*3) + 's';
         document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 6000);
+        setTimeout(() => heart.remove(), 7000);
       }
     }
 
     // Hintergrund-Herzen kontinuierlich erzeugen
-    setInterval(() => createHearts(Math.floor(Math.random()*2 + 1)), 400);
+    setInterval(() => createHearts(Math.floor(Math.random()*3 + 1)), 300);
   </script>
 
 </body>
 </html>
+
