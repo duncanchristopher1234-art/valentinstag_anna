@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Für Anna ❤️</title>
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      color: white;
+      text-align: center;
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.18);
+      padding: 25px;
+      border-radius: 25px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+      max-width: 380px;
+      width: 100%;
+      position: relative;
+    }
+
+    .image-container {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .image-container img {
+      width: 100%;
+      border-radius: 18px;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 20px;
+      animation: float 4s linear infinite;
+      opacity: 0.9;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(20px) scale(0.8);
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-120px) scale(1.3);
+        opacity: 0;
+      }
+    }
+
+    h1 {
+      font-size: 1.9em;
+      margin-bottom: 20px;
+    }
+
+    .buttons {
+      position: relative;
+      height: 70px;
+    }
+
+    button {
+      padding: 14px 26px;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      position: absolute;
+      transition: transform 0.2s;
+    }
+
+    #yes {
+      background: #ff4d6d;
+      color: white;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+
+    #no {
+      background: white;
+      color: #ff4d6d;
+      left: 10%;
+      top: 0;
+    }
+
+    #message {
+      margin-top: 25px;
+      font-size: 1.4em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="image-container" id="imageBox">
+      <img src="anna.jpeg" alt="Wir ❤️">
+    </div>
+
+    <h1>Willst du mein Valentinstags-Date sein, Anna? ❤️</h1>
+
+    <div class="buttons" id="buttons">
+      <button id="yes" onclick="yesClicked()">Ja 💖</button>
+      <button id="no" onmouseover="moveNo()">Nein 🙈</button>
+    </div>
+
+    <div id="message"></div>
+  </div>
+
+  <script>
+    // Herzen erzeugen
+    const imageBox = document.getElementById("imageBox");
+
+    setInterval(() => {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerText = "❤️";
+      heart.style.left = Math.random() * 90 + "%";
+      heart.style.bottom = "10px";
+      heart.style.fontSize = (Math.random() * 10 + 16) + "px";
+      imageBox.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 4000);
+    }, 600);
+
+    // NEIN-Button läuft weg
+    function moveNo() {
+      const no = document.getElementById("no");
+      const container = document.getElementById("buttons");
+
+      const maxX = container.offsetWidth - no.offsetWidth;
+      const maxY = container.offsetHeight - no.offsetHeight;
+
+      no.style.left = Math.random() * maxX + "px";
+      no.style.top = Math.random() * maxY + "px";
+    }
+
+    // JA geklickt
+    function yesClicked() {
+      document.getElementById("buttons").style.display = "none";
+      document.getElementById("message").innerText =
+        "Yaaay 😍 Ich freu mich riesig auf unser Date 💕";
+    }
+  </script>
+
+</body>
+</html>
